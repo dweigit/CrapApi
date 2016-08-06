@@ -1,27 +1,25 @@
 package cn.crap.service;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import cn.crap.framework.JsonResult;
 import cn.crap.framework.base.BaseService;
 import cn.crap.framework.base.IBaseDao;
 import cn.crap.inter.service.ICacheService;
-import cn.crap.inter.service.IInterfaceService;
 import cn.crap.inter.service.IDataCenterService;
-import cn.crap.model.Interface;
+import cn.crap.inter.service.IInterfaceService;
 import cn.crap.model.DataCenter;
+import cn.crap.model.Interface;
 import cn.crap.utils.MyString;
 import cn.crap.utils.Page;
 import cn.crap.utils.Tools;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class InterfaceService extends BaseService<Interface>
@@ -64,10 +62,11 @@ public class InterfaceService extends BaseService<Interface>
 			interFace.setRequestExam("请求地址:"+interFace.getModuleUrl()+interFace.getUrl()+"\r\n");
 			
 			// 请求头
-			JSONArray headers = JSONArray.fromObject(interFace.getHeader());
+
+			JSONArray headers = JSONArray.parseArray(interFace.getHeader());
 			StringBuilder strHeaders = new StringBuilder("请求头:\r\n");
 			JSONObject obj = null;
-			for(int i=0;i<headers.size();i++){  
+			for(int i=0;i<headers.size();i++){
 				obj = (JSONObject) headers.get(i);
 		        strHeaders.append("\t"+obj.getString("name") + "="+ (obj.containsKey("def")?obj.getString("def"):"")+"\r\n");
 		    }  
@@ -77,7 +76,7 @@ public class InterfaceService extends BaseService<Interface>
 			if(!MyString.isEmpty(interFace.getParam())){
 				JSONArray params = null;
 				if(interFace.getParam().startsWith("form=")){
-					 params = JSONArray.fromObject(interFace.getParam().substring(5));
+					 params = JSONArray.parseArray(interFace.getParam().substring(5));
 					 for(int i=0;i<params.size();i++){  
 							obj = (JSONObject) params.get(i);
 							if(obj.containsKey("inUrl") && obj.getString("inUrl").equals("true")){

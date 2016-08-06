@@ -64,7 +64,7 @@ public class SolrSearchService implements ISearchService{
 
     @Override
     public boolean delete(SearchDto searchDto) throws IOException {
-        List<String> ids = new ArrayList<>();
+        List<String> ids = new ArrayList<String>();
         if(searchDto != null && searchDto.getId() != null){
             ids.add(searchDto.getId());
         }
@@ -76,7 +76,7 @@ public class SolrSearchService implements ISearchService{
     public boolean update(SearchDto searchDto) throws IOException {
         Field[] fields = searchDto.getClass().getDeclaredFields();
         Field.setAccessible(fields, true);
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<String, Object>();
         getSearchDtoField(searchDto, fields, map);
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         list.add(map);
@@ -110,7 +110,7 @@ public class SolrSearchService implements ISearchService{
     public boolean add(SearchDto searchDto) throws IOException {
         Field[] fields = searchDto.getClass().getDeclaredFields();
         Field.setAccessible(fields, true);
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<String, Object>();
         getSearchDtoField(searchDto, fields, map);
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         list.add(map);

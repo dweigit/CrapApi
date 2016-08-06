@@ -2,6 +2,7 @@ package cn.crap.framework.base;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +14,6 @@ import cn.crap.utils.LogType;
 import cn.crap.utils.MyString;
 import cn.crap.utils.Page;
 import cn.crap.utils.Tools;
-import net.sf.json.JSONObject;
 
 public class BaseService<T extends BaseModel> implements IBaseService<T> {
 	protected IBaseDao<T> dao;
@@ -50,7 +50,7 @@ public class BaseService<T extends BaseModel> implements IBaseService<T> {
 		T oldModel = dao.get(model.getId());
 		if(MyString.isEmpty(remark))
 			remark = "修改："+oldModel.getLogRemark();
-		Log log = new Log(modelName, remark, LogType.UPDATE.name(), JSONObject.fromObject(oldModel).toString(),
+		Log log = new Log(modelName, remark, LogType.UPDATE.name(), JSONObject.toJSONString(oldModel),
 				model.getClass().getSimpleName(), model.getId());
 		logDao.save(log);
 		dao.update(model);
@@ -74,7 +74,7 @@ public class BaseService<T extends BaseModel> implements IBaseService<T> {
 		model = get(model.getId());
 		if(MyString.isEmpty(remark))
 			remark = "删除："+model.getLogRemark();
-		Log log = new Log(modelName, remark, LogType.DELTET.name(), JSONObject.fromObject(model).toString(),
+		Log log = new Log(modelName, remark, LogType.DELTET.name(), JSONObject.toJSONString(model),
 				model.getClass().getSimpleName(), model.getId());
 		logDao.save(log);
 		dao.delete(model);

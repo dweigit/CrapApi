@@ -2,6 +2,7 @@ package cn.crap.service;
 
 import javax.annotation.Resource;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +13,6 @@ import cn.crap.inter.dao.IInterfaceDao;
 import cn.crap.inter.service.ILogService;
 import cn.crap.model.Interface;
 import cn.crap.model.Log;
-import net.sf.json.JSONObject;
 
 @Service
 public class LogService extends BaseService<Log>
@@ -32,8 +32,8 @@ public class LogService extends BaseService<Log>
 	public void recover(Log log){
 		log = get(log.getId());
 		if(log.getModelClass().equals("Interface")){//恢复接口
-			JSONObject json = JSONObject.fromObject(log.getContent());
-			Interface inter = (Interface) JSONObject.toBean(json,Interface.class);
+			JSONObject json = JSONObject.parseObject(log.getContent());
+			Interface inter = (Interface) JSONObject.parseObject(json.toJSONString(),Interface.class);
 			// 删除旧数据，在插入新数据
 			Interface oldInter = interfaceDao.get(inter.getId());
 			if( oldInter!= null){

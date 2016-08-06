@@ -51,14 +51,12 @@ public class LuceneSearchService implements ISearchService {
 	@Autowired
 	private ICacheService cacheService;
 
-	@Override
 	public List<SearchDto> search(String keyword, Page page) throws Exception {
 		if (MyString.isEmpty(keyword))
 			return new ArrayList<SearchDto>();
 		IndexReader reader = null;
 		try {
-			reader = DirectoryReader
-					.open(FSDirectory.open(Paths.get(cacheService.getSetting(Const.SETTING_LUCENE_DIR).getValue())));
+			reader = DirectoryReader.open(FSDirectory.open(Paths.get(cacheService.getSetting(Const.SETTING_LUCENE_DIR).getValue())));
 			IndexSearcher searcher = new IndexSearcher(reader);
 			Analyzer analyzer = new StandardAnalyzer();
 			String[] fields = { "contents", "modelName", "title" };
@@ -111,16 +109,14 @@ public class LuceneSearchService implements ISearchService {
 		}
 	}
 
-	@Override
 	public boolean delete(SearchDto searchDto) throws IOException {
 		IndexWriter writer = null;
 		try {
 			IndexWriterConfig conf = new IndexWriterConfig(new StandardAnalyzer());
 			conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
-			writer = new IndexWriter(
-					FSDirectory.open(Paths.get(cacheService.getSetting(Const.SETTING_LUCENE_DIR).getValue())), conf);
+			writer = new IndexWriter(FSDirectory.open(Paths.get(cacheService.getSetting(Const.SETTING_LUCENE_DIR).getValue())), conf);
 			writer.deleteDocuments(new Term("id", searchDto.getId()));
-		} catch (Exception e) {
+		} catch (IOException e) {
 			throw e;
 		} finally {
 			if (writer != null) {
@@ -192,16 +188,14 @@ public class LuceneSearchService implements ISearchService {
 		doc.add(new StringField("r_" + fieldName, hc, Field.Store.YES));
 	}
 
-	@Override
 	public boolean add(SearchDto searchDto) throws IOException {
 		IndexWriter writer = null;
 		try {
 			IndexWriterConfig conf = new IndexWriterConfig(new StandardAnalyzer());
 			conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
-			writer = new IndexWriter(
-					FSDirectory.open(Paths.get(cacheService.getSetting(Const.SETTING_LUCENE_DIR).getValue())), conf);
+			writer = new IndexWriter(FSDirectory.open(Paths.get(cacheService.getSetting(Const.SETTING_LUCENE_DIR).getValue())), conf);
 			writer.updateDocument(new Term("id", searchDto.getId()), dtoToDoc(searchDto));
-		} catch (Exception e) {
+		} catch (IOException e) {
 			throw e;
 		} finally {
 			if (writer != null) {
@@ -211,16 +205,14 @@ public class LuceneSearchService implements ISearchService {
 		return true;
 	}
 	
-	@Override
 	public boolean update(SearchDto searchDto) throws IOException {
 		IndexWriter writer = null;
 		try {
 			IndexWriterConfig conf = new IndexWriterConfig(new StandardAnalyzer());
 			conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
-			writer = new IndexWriter(
-					FSDirectory.open(Paths.get(cacheService.getSetting(Const.SETTING_LUCENE_DIR).getValue())), conf);
+			writer = new IndexWriter(FSDirectory.open(Paths.get(cacheService.getSetting(Const.SETTING_LUCENE_DIR).getValue())), conf);
 			writer.updateDocument(new Term("id", searchDto.getId()), dtoToDoc(searchDto));
-		} catch (Exception e) {
+		} catch (IOException e) {
 			throw e;
 		} finally {
 			if (writer != null) {

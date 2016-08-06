@@ -18,7 +18,7 @@ import cn.crap.utils.MyString;
 import cn.crap.utils.Tools;
 
 @Service
-@Repository(value = "cacheService")
+//@Repository(value = "cacheService")
 public class CacheService implements ICacheService {
 	private ICacheDao cacheDao = GetBeanBySetting.getCacheDao();
 	@Resource(name="settingDao")
